@@ -1,7 +1,7 @@
 import tkinter as tk
 import random
 import time
-
+import json
 class TyperacerGame:
     def __init__(self, root):
         self.root = root
@@ -56,8 +56,7 @@ class TyperacerGame:
 
     def update_timer(self):
         if self.timer_running:
-            elapsed_time = int(time.time() - self.time_start)
-            
+            elapsed_time = int(time.time() - self.time_start)           
             self.root.title("Typeracer Game - Time: {}s".format(elapsed_time))
             self.root.after(1000, self.update_timer)
             if elapsed_time >= 30:
@@ -67,9 +66,61 @@ class TyperacerGame:
                 self.entry.unbind("<Return>")
                 self.start_button.config(state=tk.NORMAL)
         
+class enemy:
+    def __init__(self):
+        f = open('C:\\Users\\aungk\\Documents\\Python\\Json files\\Enemy.json')
+        enemyjson = json.load(f)
+        enemynamelist = []
+        enemyhplist = []
+
+        for i in enemyjson["enemy_details"]:
+            enemynamelist.append(i["enemy_name"])
+            enemyhplist.append(i["enemy_health"])
+        print(enemynamelist)
+        print(enemyhplist)
+    
+    def gethealth(self):
+        ###Everyword typed, check for hp###
+
+        print("hello")
+
+    
+    def getlevel(self):
+        ###Get the level in order to determine the difficulty of the enemy###
+        print("hello")
+
+    def getimage(self):
+        ###based on the inputed enemy, retrieve the image needed###
+
+        print("hello")
+    
+    def sethealth(self):
+        ###change the hp with every word typed###
+
+        print("hello")
+
+    
+
+    
+    
+
+    
+
+
+    
+
+
+    
+
+
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     game = TyperacerGame(root)
     root.mainloop()
+
+
+
+cek = enemy()
+
