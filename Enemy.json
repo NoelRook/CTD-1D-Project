@@ -1,0 +1,21 @@
+{
+    "enemy_details": [
+        {
+            "enemy_name":"Slime",
+            "enemy_health": "100",
+            "enemy_pic_name": "Skeleton.png"
+        },
+        {
+            "enemy_name":"Zombie",
+            "enemy_health": "100",
+            "enemy_pic_name": "Skeleton.png"
+        },
+        {
+            "enemy_name":"Skeleton",
+            "enemy_health": "100",
+            "enemy_pic_name": "Skeleton.png"
+
+        }
+
+    ]
+}
