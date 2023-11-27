@@ -2,10 +2,15 @@ import tkinter as tk
 import random
 import time
 
-class TyperacerGame:
+import json
+class TyperacerGame(object):
+    
     def __init__(self, root):
         self.root = root
         self.root.title("Typeracer Game")
+        obj = enemy()
+        obj.getrandomenemy()
+
 
         self.words = ["python", "programming", "challenge", "typeracer", "keyboard", "developer", "coding", "practice", "speed", "game"]
         self.current_word = ""
@@ -27,6 +32,12 @@ class TyperacerGame:
         self.timer_label.pack()
         self.start_button = tk.Button(root, text="Start Game", command=self.start_game)
         self.start_button.pack(pady=20)
+        
+        
+
+
+
+
 
     def start_game(self):
         self.score = 0
@@ -37,6 +48,11 @@ class TyperacerGame:
         self.timer_running = True
         self.time_start = time.time()
         self.update_timer()
+        enemykek.getrandomenemy()
+        
+        
+
+        
 
     def update_score(self):
         self.score_label.config(text="Score: {}".format(self.score))
@@ -53,11 +69,11 @@ class TyperacerGame:
                 self.update_score()
                 self.start_new_word()
                 self.entry.delete(0, tk.END)
+                
 
     def update_timer(self):
         if self.timer_running:
-            elapsed_time = int(time.time() - self.time_start)
-            
+            elapsed_time = int(time.time() - self.time_start)           
             self.root.title("Typeracer Game - Time: {}s".format(elapsed_time))
             self.root.after(1000, self.update_timer)
             if elapsed_time >= 30:
@@ -67,9 +83,60 @@ class TyperacerGame:
                 self.entry.unbind("<Return>")
                 self.start_button.config(state=tk.NORMAL)
         
+class enemy:
+    def __init__(self):
+        f = open('C:\\Users\\aungk\\Documents\\Python\\CTD-1D-Project\\Enemy.json')
+
+        enemyjson = json.load(f)
+        self.enemynamelist = []
+        self.enemyhplist = []
+        self.enemyimagelist = []
+        for i in enemyjson["enemy_details"]:
+            self.enemynamelist.append(i["enemy_name"])
+            self.enemyhplist.append(i["enemy_health"])
+            self.enemyimagelist.append(i["enemy_pic_name"])
+        print(self.enemynamelist)
+        print(self.enemyhplist)
+    
+    def getrandomenemy(self):
+        randomenemy= random.choice(self.enemynamelist)
+        randomenemyindex = self.enemynamelist.index(randomenemy)
+        randomenemyimage = self.enemyimagelist[randomenemyindex]
+        image = tk.PhotoImage(file=randomenemyimage)      
+        
+
+
+
+    def gethealth(self):
+        ###Everyword typed, check for hp###
+
+        print("hello")
+
+    
+    def getlevel(self):
+        ###Get the level in order to determine the difficulty of the enemy###
+        print("hello")
+
+    def getimage(self):
+        ###based on the inputed enemy, retrieve the image needed###
+
+        print("hello")
+    
+    def sethealth(self):
+        ###change the hp with every word typed###
+
+        print("hello")
+
 
 
 if __name__ == "__main__":
     root = tk.Tk()
+    enemykek = enemy()
     game = TyperacerGame(root)
+
     root.mainloop()
+    
+
+
+
+
