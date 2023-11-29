@@ -4,89 +4,10 @@ import time
 import tkinter as tk
 from tkinter import ttk
 import json
-class TyperacerGame(object):
-    
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Typeracer Game")
-        obj = enemy()
-        obj.getrandomenemy()
 
-
-        self.words = ["python", "programming", "challenge", "typeracer", "keyboard", "developer", "coding", "practice", "speed", "game"]
-        self.current_word = ""
-        self.user_input = ""
-        self.score = 0
-        self.time_start = 0
-        self.timer_running = False
-
-        self.word_label = tk.Label(root, text="", font=("Helvetica", 24))
-        self.word_label.pack(pady=30)
-
-        self.entry = tk.Entry(root, font=("Helvetica", 18))
-        self.entry.pack(pady=10)
-        self.entry.bind("<Return>", self.check_input)
-
-        self.score_label = tk.Label(root, text="Score: 0", font=("Helvetica", 18))
-        self.score_label.pack()
-        self.timer_label = tk.Label(root,text="this is timer")
-        self.timer_label.pack()
-        self.start_button = tk.Button(root, text="Start Game", command=self.start_game)
-        self.start_button.pack(pady=20)
-        
-        
-
-
-
-
-
-    def start_game(self):
-        self.score = 0
-        self.update_score()
-        self.start_new_word()
-        self.entry.delete(0, tk.END)
-        self.entry.focus_set()
-        self.timer_running = True
-        self.time_start = time.time()
-        self.update_timer()
-        enemykek.getrandomenemy()
-        
-        
-
-        
-
-    def update_score(self):
-        self.score_label.config(text="Score: {}".format(self.score))
-
-    def start_new_word(self):
-        self.current_word = random.choice(self.words)
-        self.word_label.config(text=self.current_word)
-
-    def check_input(self, event):
-        if self.timer_running:
-            self.user_input = self.entry.get().strip()
-            if self.user_input == self.current_word:
-                self.score += 1
-                self.update_score()
-                self.start_new_word()
-                self.entry.delete(0, tk.END)
-                
-
-    def update_timer(self):
-        if self.timer_running:
-            elapsed_time = int(time.time() - self.time_start)           
-            self.root.title("Typeracer Game - Time: {}s".format(elapsed_time))
-            self.root.after(1000, self.update_timer)
-            if elapsed_time >= 30:
-                self.timer_running = False
-                self.root.title("Typeracer Game - Time's up!")
-                self.entry.delete(0, tk.END)
-                self.entry.unbind("<Return>")
-                self.start_button.config(state=tk.NORMAL)
-        
 class enemy:
     def __init__(self):
-        f = open('C:\\Users\\aungk\\Documents\\Python\\CTD-1D-Project\\Enemy.json')
+        f = open('Enemy.json')
 
         enemyjson = json.load(f)
         self.enemynamelist = []
@@ -102,8 +23,10 @@ class enemy:
     def getrandomenemy(self):
         randomenemy= random.choice(self.enemynamelist)
         randomenemyindex = self.enemynamelist.index(randomenemy)
-        randomenemyimage = self.enemyimagelist[randomenemyindex]
-        image = tk.PhotoImage(file=randomenemyimage)      
+        randomenemyimage = "assets/images/"+self.enemyimagelist[randomenemyindex]
+        image = tk.PhotoImage(file=randomenemyimage) 
+        print(randomenemy)
+        return randomenemyimage     
         
 
 
@@ -120,66 +43,58 @@ class enemy:
 
     def getimage(self):
         ###based on the inputed enemy, retrieve the image needed###
-
+        return self.getrandomenemy()
         print("hello")
     
     def sethealth(self):
         ###change the hp with every word typed###
 
         print("hello")
-    def update_image(widget,container,image):
-        widget.itemconfig(container,image=image)
-
+def update_image(widget,container,image):
+    widget.itemconfig(container,image=image)
+    
+def create_MainMenu_window():
+    #START
+    window.title("TEST ALPHA")  
+    window.geometry("860x500")
+    #Declare Widgits
+    Blank = ttk.Label(window,text='',width=45)
+    Blank2 = ttk.Label(window,text='',width=10)
+    #Blank.grid(row=0,column=0) 
+    #Blank2.grid(row=1,column=0)
+    Title = tk.Label(window,text='Type Caster',font=("Comfortaa",40))
+    PlayButton = tk.Button(window,text='Play',command =lambda:start_game() )
+    #Grid Method
+    Title.grid(row=0,column=1)
+    PlayButton.grid(row = 1, column = 1)
+    
+def start_game():
+    game_page()
+def game_page():    
+    img =tk.PhotoImage(file=enemykek.getimage())
+    window.img =img 
+    img2 =tk.PhotoImage(file=enemykek.getimage())
+    #Declare Widgits
+    settings_button = tk.Button(window, text = "Settings", width=30, borderwidth=2, relief="raised",command=lambda:update_image(Enemy_canvas,container,img2)) #Add setting menu, Currently randomise picture
+    Enemy_canvas =tk.Canvas(width=200,height=300,bg='white')
+    Blank = ttk.Label(window,text='',width=45)
+    Blank2 = ttk.Label(window,text='',width=45)
+    Enemy_info = ttk.Label(window,text='Name: {Name}      Health: {health}'.format(health= 30,Name='name')) #Call method get_health and get_name for format
+    Entry = ttk.Label(window, text = "Name: {name}   Health: {health}".format(name="Player",health = 100), width=30, borderwidth=2, relief="raised") #Call method get_health and get_name for format
+    #Grid Method
+    Blank.grid(row=0,column=0) 
+    Blank2.grid(row=0,column=3)
+    Enemy_info.grid(row=1,column=1)
+    Enemy_canvas.grid(row = 0, column = 1, sticky = tk.W, pady = 2)
+    settings_button.grid(row = 1,column = 3)
+    Entry.grid(row=3,column=1)
+    #add image
+    container = Enemy_canvas.create_image(0,0,image=img,anchor='nw') 
 
 if __name__ == "__main__":
     enemykek = enemy()
-    
-    
-
     window = tk.Tk()
-    window.title("TEST ALPHA")  
-    window.geometry("860x500")
-    #update image Function
-
-        
-    #create image variable
-    img1 =tk.PhotoImage(file="FIshMAn.png")
-    img2 = tk.PhotoImage(file='GayMam.png')
-
-    Enemy_image = tk.Label(window, image =img1, width=30,height = 20)
-    cavas =tk.Canvas(width=200,height=300,bg='black')
-
-    # Declare Widgits
-    settings_button = tk.Button(window, text = "Settings", width=30, borderwidth=2, relief="raised",command=lambda:update_image(cavas,container,img2))
-
-    Blank = tk.Label(window,text='',width=45)
-
-    Blank2 = tk.Label(window,text='',width=45)
-    Enemy_info = tk.lable()
-
-    Entry = ttk.Label(window, text = "Name:{name}   Health:{health}".format(), width=30, borderwidth=2, relief="raised")
-
-    #Grid methods
-    Blank.grid(row=0,column=0) 
-    Blank2.grid(row=0,column=3)
-
-    cavas.grid(row = 0, column = 1, sticky = tk.W, pady = 2)
-
-
-    settings_button.grid(row = 1,column = 3)
-
-    Entry.grid(row=3,column=1) 
-
-
-    #add image
-    container = cavas.create_image(0,0,image=img1,anchor='nw')
-
-
+    create_MainMenu_window()
+    #game_page(window)        
     tk.mainloop()
         
-    
-    
-
-
-
-
