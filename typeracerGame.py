@@ -111,7 +111,7 @@ class enemy:
     def gethealth(self):
         ###Everyword typed, check for hp###
 
-        print("hello")
+        print("chingchong")
 
     
     def getlevel(self):
@@ -127,7 +127,8 @@ class enemy:
         ###change the hp with every word typed###
 
         print("hello")
-
+    def update_image(widget,container,image):
+        widget.itemconfig(container,image=image)
 
 
 if __name__ == "__main__":
@@ -139,8 +140,7 @@ if __name__ == "__main__":
     window.title("TEST ALPHA")  
     window.geometry("860x500")
     #update image Function
-    def update_image(widget,container,image):
-        widget.itemconfig(container,image=image)
+
         
     #create image variable
     img1 =tk.PhotoImage(file="FIshMAn.png")
