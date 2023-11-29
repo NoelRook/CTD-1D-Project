@@ -1,7 +1,8 @@
-import tkinter as tk
+
 import random
 import time
-
+import tkinter as tk
+from tkinter import ttk
 import json
 class TyperacerGame(object):
     
@@ -130,11 +131,53 @@ class enemy:
 
 
 if __name__ == "__main__":
-    root = tk.Tk()
     enemykek = enemy()
-    game = TyperacerGame(root)
+    
+    
 
-    root.mainloop()
+    window = tk.Tk()
+    window.title("TEST ALPHA")  
+    window.geometry("860x500")
+    #update image Function
+    def update_image(widget,container,image):
+        widget.itemconfig(container,image=image)
+        
+    #create image variable
+    img1 =tk.PhotoImage(file="FIshMAn.png")
+    img2 = tk.PhotoImage(file='GayMam.png')
+
+    Enemy_image = tk.Label(window, image =img1, width=30,height = 20)
+    cavas =tk.Canvas(width=200,height=300,bg='black')
+
+    # Declare Widgits
+    settings_button = tk.Button(window, text = "Settings", width=30, borderwidth=2, relief="raised",command=lambda:update_image(cavas,container,img2))
+
+    Blank = tk.Label(window,text='',width=45)
+
+    Blank2 = tk.Label(window,text='',width=45)
+    Enemy_info = tk.lable()
+
+    Entry = ttk.Label(window, text = "Name:{name}   Health:{health}".format(), width=30, borderwidth=2, relief="raised")
+
+    #Grid methods
+    Blank.grid(row=0,column=0) 
+    Blank2.grid(row=0,column=3)
+
+    cavas.grid(row = 0, column = 1, sticky = tk.W, pady = 2)
+
+
+    settings_button.grid(row = 1,column = 3)
+
+    Entry.grid(row=3,column=1) 
+
+
+    #add image
+    container = cavas.create_image(0,0,image=img1,anchor='nw')
+
+
+    tk.mainloop()
+        
+    
     
 
 
