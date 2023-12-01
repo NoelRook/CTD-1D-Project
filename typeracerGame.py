@@ -4,50 +4,61 @@ import time
 import tkinter as tk
 from tkinter import ttk
 import json
+enemynamelist = []
+enemyhplist = []
+enemyimagelist = []
+
+
 
 class enemy:
     def __init__(self):
         f = open('Enemy.json')
 
         enemyjson = json.load(f)
-        self.enemynamelist = []
-        self.enemyhplist = []
-        self.enemyimagelist = []
+        global enemyhplist
+        global enemyimagelist
+        global enemynamelist
+        
         for i in enemyjson["enemy_details"]:
-            self.enemynamelist.append(i["enemy_name"])
-            self.enemyhplist.append(i["enemy_health"])
-            self.enemyimagelist.append(i["enemy_pic_name"])
-        print(self.enemynamelist)
-        print(self.enemyhplist)
+            enemynamelist.append(i["enemy_name"])
+            enemyhplist.append(i["enemy_health"])
+            enemyimagelist.append(i["enemy_pic_name"])
+        print(enemyhplist)
+        print(enemynamelist)
+        print(enemyimagelist)
+        
+
+        
     
     def getrandomenemy(self):
-        randomenemy= random.choice(self.enemynamelist)
-        randomenemyindex = self.enemynamelist.index(randomenemy)
-        randomenemyimage = "assets/images/"+self.enemyimagelist[randomenemyindex]
-        image = tk.PhotoImage(file=randomenemyimage) 
-        print(randomenemy)
-        return randomenemyimage     
+        randomenemy= random.choice(enemynamelist)
+        
+        
+        return randomenemy     
         
 
 
 
-    def gethealth(self):
+    def gethealth(self,enemyname):
         ###Everyword typed, check for hp###
-
-        print("chingchong")
+        
+        currenthealth = enemyhplist[enemynamelist.index(enemyname)]
+        return currenthealth
+        
 
     
     def getlevel(self):
-        ###Get the level in order to determine the difficulty of the enemy###
+        
         print("hello")
 
-    def getimage(self):
-        ###based on the inputed enemy, retrieve the image needed###
-        return self.getrandomenemy()
-        print("hello")
+    def getimage(self,enemyname):
+        randomenemyindex = enemynamelist.index(enemyname)
+        randomenemyimage = enemyimagelist[randomenemyindex]
+        return randomenemyimage
+        
     
     def sethealth(self):
-        ###change the hp with every word typed###
+        
 
         print("hello")
 def update_image(widget,container,image):
@@ -71,15 +82,20 @@ def create_MainMenu_window():
 def start_game():
     game_page()
 def game_page():    
-    img =tk.PhotoImage(file=enemykek.getimage())
+    enemy1 = enemykek.getrandomenemy()
+    enemy2 = enemykek.getrandomenemy()
+    img =tk.PhotoImage(file=enemykek.getimage(enemy1))
     window.img =img 
-    img2 =tk.PhotoImage(file=enemykek.getimage())
+    img2 =tk.PhotoImage(file=enemykek.getimage(enemy2))
     #Declare Widgits
     settings_button = tk.Button(window, text = "Settings", width=30, borderwidth=2, relief="raised",command=lambda:update_image(Enemy_canvas,container,img2)) #Add setting menu, Currently randomise picture
     Enemy_canvas =tk.Canvas(width=200,height=300,bg='white')
     Blank = ttk.Label(window,text='',width=45)
     Blank2 = ttk.Label(window,text='',width=45)
-    Enemy_info = ttk.Label(window,text='Name: {Name}      Health: {health}'.format(health= 30,Name='name')) #Call method get_health and get_name for format
+    
+
+    
+    Enemy_info = ttk.Label(window,text='Name: {Name} Health: {health}'.format(health= enemykek.gethealth(enemy1),Name=enemykek.getrandomenemy())) #Call method get_health and get_name for format
     Entry = ttk.Label(window, text = "Name: {name}   Health: {health}".format(name="Player",health = 100), width=30, borderwidth=2, relief="raised") #Call method get_health and get_name for format
     #Grid Method
     Blank.grid(row=0,column=0) 
