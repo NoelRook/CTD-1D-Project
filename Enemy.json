@@ -2,18 +2,21 @@
     "enemy_details": [
         {
             "enemy_name":"Slime",
-            "enemy_health": "100",
-            "enemy_pic_name": "Skeleton.png"
+            "enemy_health": 10,
+            "enemy_pic_name": "Slime.png",
+            "enemy_damage": 3
         },
         {
             "enemy_name":"Zombie",
-            "enemy_health": "100",
-            "enemy_pic_name": "Skeleton.png"
+            "enemy_health": 30,
+            "enemy_pic_name": "Zombie.png",
+            "enemy_damage": 5
         },
         {
             "enemy_name":"Skeleton",
-            "enemy_health": "100",
-            "enemy_pic_name": "Skeleton.png"
+            "enemy_health": 20,
+            "enemy_pic_name": "Skeleton.png",
+            "enemy_damage": 10
 
         }
 
