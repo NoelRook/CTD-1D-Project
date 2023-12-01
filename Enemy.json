@@ -3,12 +3,12 @@
         {
             "enemy_name":"Slime",
             "enemy_health": "100",
-            "enemy_pic_name": "Skeleton.png"
+            "enemy_pic_name": "Slime.png"
         },
         {
             "enemy_name":"Zombie",
             "enemy_health": "100",
-            "enemy_pic_name": "Skeleton.png"
+            "enemy_pic_name": "Zombie.png"
         },
         {
             "enemy_name":"Skeleton",
