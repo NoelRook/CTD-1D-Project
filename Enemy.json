@@ -18,7 +18,120 @@
             "enemy_pic_name": "Skeleton.png",
             "enemy_damage": 10
 
+        },
+        {
+            "enemy_name":"Dragon",
+            "enemy_health": 20,
+            "enemy_pic_name": "dragon.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Squid",
+            "enemy_health": 20,
+            "enemy_pic_name": "squid.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Fiend",
+            "enemy_health": 20,
+            "enemy_pic_name": "fiend.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Elemental",
+            "enemy_health": 20,
+            "enemy_pic_name": "elemental.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Vampire",
+            "enemy_health": 20,
+            "enemy_pic_name": "vampire.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Demon",
+            "enemy_health": 20,
+            "enemy_pic_name": "demon.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Golem",
+            "enemy_health": 20,
+            "enemy_pic_name": "golem.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Troll",
+            "enemy_health": 20,
+            "enemy_pic_name": "troll.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Goblin",
+            "enemy_health": 20,
+            "enemy_pic_name": "goblin.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Orc",
+            "enemy_health": 20,
+            "enemy_pic_name": "orc.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Celestial",
+            "enemy_health": 20,
+            "enemy_pic_name": "celestial.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Werewolf",
+            "enemy_health": 20,
+            "enemy_pic_name": "werewolf.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Vermin",
+            "enemy_health": 20,
+            "enemy_pic_name": "vermin.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Fey",
+            "enemy_health": 20,
+            "enemy_pic_name": "fey.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"Plant",
+            "enemy_health": 20,
+            "enemy_pic_name": "plant.png",
+            "enemy_damage": 10
+
+        },
+        {
+            "enemy_name":"T-rex",
+            "enemy_health": 20,
+            "enemy_pic_name": "trex.png",
+            "enemy_damage": 10
+
         }
+        
 
     ]
 }

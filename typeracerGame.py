@@ -60,7 +60,9 @@ class enemy:
         self.dialogue =dialogue
         self.damage =damage
         self.cooldown =cooldown
-        self.WordList=["Wet","Jump","Legso","War"]
+        self.WordList=["Wet","Jump","Legso","War","apple", "book", "desk", "pen", "cat", "dog", "tree", "house", "car", "phone",
+             "computer", "laptop", "keyboard", "mouse", "chair", "table", "door", "window", "wall", "floor","vagabond","knowing","hellish","ragged","brush"
+             ,"nine","hideous","homeless","annoying","damaged","alcoholic","malicious","perpetual","wondeful","language","chemical","crazy","I was crazy once","They locked me in a room","A rubber room","A rubber room with rats"]
     def gethealth(self):
         ###Everyword typed, check for hp###
         return self.enemyhp
@@ -289,7 +291,7 @@ if __name__ == "__main__":
     time_start = 0
     timer_running = False
     window = tk.Tk()
-    create_MainMenu_window(window)
+    create_MainMenu_window()
     #game_page(window)        
     tk.mainloop()   
         
