@@ -7,7 +7,7 @@ from tkinter import ttk
 import json
 import os
 import numpy as np
-os.chdir("C://Users\Wei Yang\Desktop\SUTD\CTD\CTD 1D\CTD-1D-Project-main")
+
 
 
 
@@ -60,6 +60,7 @@ class enemy:
         self.dialogue =dialogue
         self.damage =damage
         self.cooldown =cooldown
+        self.WordList=["Wet","Jump","Legso","War"]
     def gethealth(self):
         ###Everyword typed, check for hp###
         return self.enemyhp
@@ -69,7 +70,8 @@ class enemy:
         return self.enemyimage
     def getdamage(self):
         return self.damage
-    
+    def getWordList(self):
+        return self.WordList
     def sethealth(self,value):
         self.enemyhp += value
 
@@ -87,7 +89,7 @@ class enemy:
 def RoundtoNearest(value,base):
     return base*round(value/base)    
 
-def create_MainMenu_window(obj):
+def create_MainMenu_window():
     
     Frame = ttk.Frame(window)
     #START
@@ -97,7 +99,7 @@ def create_MainMenu_window(obj):
     Blank2 = ttk.Label(Frame,text='',width=10)
 
     Title = tk.Label(Frame,text='Type Caster',font=("Comfortaa",40))
-    PlayButton = tk.Button(Frame,text='Play',command =lambda:obj.game_page() )
+    PlayButton = tk.Button(Frame,text='Play',command =lambda:game_page() )
     #Grid Method
     Title.grid(row=0,column=1)
     PlayButton.grid(row = 1, column = 1)
@@ -186,12 +188,13 @@ def game_page():
         Frame.img =img 
         widget.itemconfig(container,image=img) 
         Enemy_info.config(text='  Name: {Name}'.format(Name=enemy.getname()).ljust(17)+'Health: {health}'.format(health=enemy.gethealth()).ljust(12),relief="solid")
-        Enemy_stats.config(text=" Level: {L}\n Enemy Name: {n}\n Enemy Health: {h}\n Enemy Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))
+        Enemy_stats.config(text=" Level: {L}\n Enemy: {n}\n Health: {h}\n Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))
    
-   
+    timer_running = True
+    time_start = time.time()
+    
     Levels.append(Level(Current_Level).generate_lvl())
     enemy = Levels[Current_Level-1].Choose_Enemy()
-    print(enemy)
     style =ttk.Style()
     Font =font.Font(family = 'MS Gothic')
     style.configure('TFrame', background='black')
@@ -206,9 +209,11 @@ def game_page():
     Mid_block= ttk.Frame(Frame,width=200,height=300,relief="solid")
     Right_block = ttk.Frame(Frame,width=200,height=300,relief="solid")
     # Right Frame----------------------------------------
-    Enemy_stats = ttk.Label(Right_block,text=" Level: {L}\n Enemy Name: {n}\n Enemy Health: {h}\n Enemy Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))    
-    Enemy_stats.place(x=10,y=10)
+    Enemy_stats = ttk.Label(Right_block,text=" Level: {L}\n Enemy: {n}\n Health: {h}\n Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))    
+    Enemy_stats.place(x=4,y=10)
     Right_block.grid_propagate (False) 
+    PB = ttk.Progressbar(Right_block,orient='horizontal',mode='determinate',length=180)
+    PB.place(x=10,y=200)
 #----------------------------------------------------------------------
     settings_button = tk.Button(Frame, text = "Next", width=10, borderwidth=2, relief="raised",command=lambda:NextEnemy(Enemy_canvas,container,Current_Level+1)) #Add setting menu, Currently randomise picture
     Enemy_canvas =tk.Canvas(Mid_block,width=200,height=300,bg='black')
@@ -216,8 +221,8 @@ def game_page():
     Player_info = ttk.Label(Frame, text = '  Name: {Name}'.format(Name='Player').ljust(17)+'Health: {health}'.format(health='100').ljust(12), borderwidth=2, relief="solid") #Call method get_health and get_name for format
     Word_box = ttk.Frame(Frame,width=200,height=45,relief="solid",padding=10)
     Entry = ttk.Entry(Frame,width=30)
+    Word_request = ttk.Label(Word_box,text=random.choice(enemy.getWordList()))
 
-    Word_request = ttk.Label(Word_box,text='TESTING')
     #Grid Method-----------------------------------------------
     Left_block.grid(row=0,column=0,padx=3,pady=5) 
     Right_block.grid(row=0,column=3,padx=3,pady=5)
@@ -238,8 +243,44 @@ def game_page():
     img =tk.PhotoImage(file="assets/images/"+enemy.getimage())
     Frame.img =img 
     container = Enemy_canvas.create_image(0,0,image=img,anchor='nw') 
-    Entry.focus()
+    #Setups
+    
+    Entry.bind("<Return>", check_input(enemy,Word_request,Entry,Word_request.cget("text"),timer_running))# Check Inputs
+    update_timer(10,PB,time_start,timer_running)
 
+def check_input(enemy,Word_request,inputbox,current_word,running, event=None): # Damaage calcuation here too
+    print(running)
+    if running:
+        user_input = inputbox.get().strip()
+        print(user_input)
+        print(current_word)
+        print(user_input==current_word)
+        if user_input == current_word:
+            score += 1 #damage function
+            #update_score()
+            Word_request.config(text =random.choice(enemy.getWordList())) 
+            inputbox.delete(0, tk.END)
+
+def deal_damage():
+    pass
+def update_timer(time_limit,progressbar,time_start,running,event=None):
+        if event == "dead":
+            return None
+        else:
+            if running:
+                elapsed_time = time.time() - time_start
+                timepercent = int((elapsed_time/time_limit)*100)
+
+                progressbar['value'] = timepercent
+                if timepercent >=100:
+                    progressbar['value'] = 0
+                    time_start = time.time()
+                    deal_damage()
+
+            window.after(1000,lambda: update_timer(time_limit,progressbar,time_start,running))
+
+                
+                
 
 Levels = []
 if __name__ == "__main__":
@@ -248,7 +289,7 @@ if __name__ == "__main__":
     time_start = 0
     timer_running = False
     window = tk.Tk()
-    create_MainMenu_window()
+    create_MainMenu_window(window)
     #game_page(window)        
-    tk.mainloop()
+    tk.mainloop()   
         
