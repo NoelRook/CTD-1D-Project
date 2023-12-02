@@ -9,6 +9,107 @@ import os
 import numpy as np
 os.chdir("C://Users\Wei Yang\Desktop\SUTD\CTD\CTD 1D\CTD-1D-Project-main")
 
+
+
+class Level:
+    def __init__(self,lvl,special =False) :
+        self.lvl_num = lvl
+        self.list_of_enemies = []
+        self.event = special
+        f = open('Enemy.json')
+        self.enemyjson = json.load(f)['enemy_details']
+
+    def get_level(self):
+        return self.lvl_num+1
+    
+    def get_list_of_enemies(self):
+        return self.list_of_enemies
+
+    def generate_lvl(self):
+        if self.event == False:
+            
+            NumOfEnemies = int(2+abs(1+self.lvl_num)*.4)
+            temp = random.sample(self.enemyjson,3)
+            for i in temp:
+                self.list_of_enemies.append(enemy(enemyname=i['enemy_name'],enemyhp=i['enemy_health'],enemyimage=i['enemy_pic_name'],damage= i['enemy_damage'],cooldown = 0)) # remeber to change damage and cooldown
+
+            
+            self.LvlUp()
+            return self
+        elif self.event== True:
+            pass
+
+    def LvlUp(self):
+        temp =[]
+        for i in self.list_of_enemies:
+
+            temp.append(i.set_Lvl(self.lvl_num))
+        self.list_of_enemies = temp
+        
+    def Choose_Enemy(self):
+        return random.sample(self.list_of_enemies,1)[0]
+    
+    
+class enemy:
+    def __init__(self,enemyname,enemyhp,enemyimage, dialogue= '',EXP= 0,damage= 0,cooldown = 0):
+
+        self.enemyhp =enemyhp
+        self.enemyimage=enemyimage
+        self.enemyname=enemyname
+        self.EXP = EXP
+        self.dialogue =dialogue
+        self.damage =damage
+        self.cooldown =cooldown
+    def gethealth(self):
+        ###Everyword typed, check for hp###
+        return self.enemyhp
+    def getname(self):
+        return self.enemyname   
+    def getimage(self):
+        return self.enemyimage
+    def getdamage(self):
+        return self.damage
+    
+    def sethealth(self,value):
+        self.enemyhp += value
+
+
+    def getEXP(self,player_lvl=None,lvl=None):
+        return self.EXP
+    
+    def set_Lvl(self,lvl):
+        self.enemyhp =  RoundtoNearest(self.enemyhp*(1+lvl*.1),5)
+        self.damage =RoundtoNearest(self.damage*(1+lvl*.5),5)
+        self.cooldown = int(self.cooldown- 2*np.log2((lvl+1)*.9))
+        return self
+
+
+def RoundtoNearest(value,base):
+    return base*round(value/base)    
+
+def create_MainMenu_window(obj):
+    
+    Frame = ttk.Frame(window)
+    #START
+    window.title("TEST ALPHA")  
+    #Declare Widgits
+    Blank = ttk.Label(Frame,text='',width=45)
+    Blank2 = ttk.Label(Frame,text='',width=10)
+
+    Title = tk.Label(Frame,text='Type Caster',font=("Comfortaa",40))
+    PlayButton = tk.Button(Frame,text='Play',command =lambda:obj.game_page() )
+    #Grid Method
+    Title.grid(row=0,column=1)
+    PlayButton.grid(row = 1, column = 1)
+    Frame.grid(row=0,column=0)
+    #Blank.grid(row=0,column=0) 
+    #Blank2.grid(row=1,column=0)
+
+#def start_game():
+ #   Levels.append(Level(Current_Level).generate_lvl())
+    
+  #  game_page()
+
 class TyperacerGame:
     def __init__(self, root):
         self.root = root
@@ -70,106 +171,10 @@ class TyperacerGame:
                 self.root.title("Typeracer Game - Time's up!")
                 self.entry.delete(0, tk.END)
                 self.entry.unbind("<Return>")
-                self.start_button.config(state=tk.NORMAL)
-
-class Level:
-    def __init__(self,lvl,special =False) :
-        self.lvl_num = lvl
-        self.list_of_enemies = []
-        self.event = special
-        f = open('Enemy.json')
-        self.enemyjson = json.load(f)['enemy_details']
-
-    def get_level(self):
-        return self.lvl_num+1
-    
-    def get_list_of_enemies(self):
-        return self.list_of_enemies
-
-    def generate_lvl(self):
-        if self.event == False:
-            
-            NumOfEnemies = int(2+abs(1+self.lvl_num)*.4)
-            temp = random.sample(self.enemyjson,3)
-            for i in temp:
-                self.list_of_enemies.append(enemy(enemyname=i['enemy_name'],enemyhp=i['enemy_health'],enemyimage=i['enemy_pic_name'],damage= i['enemy_damage'],cooldown = 0)) # remeber to change damage and cooldown
-
-            
-            self.LvlUp()
-            return self
-        elif self.event== True:
-            pass
-
-    def LvlUp(self):
-        temp =[]
-        for i in self.list_of_enemies:
-
-            temp.append(i.set_Lvl(self.lvl_num))
-        self.list_of_enemies = temp
-        
-    def Choose_Enemy(self):
-        return random.sample(self.list_of_enemies,1)[0]
-    
-    
-class enemy:
-    def __init__(self,enemyname,enemyhp,enemyimage, dialogue= '',EXP= 0,damage= 0,cooldown = 0):
-
-        self.enemyhp =enemyhp
-        self.enemyimage=enemyimage
-        self.enemyname=enemyname
-        self.EXP = EXP
-        self.dialogue =dialogue
-        self.damage =damage
-        self.cooldown =cooldown
-    def gethealth(self):
-        ###Everyword typed, check for hp###
-        return self.enemyhp
-    def getname(self):
-        return self.enemyname   
-    def getimage(self):
-        return self.enemyimage
-        
-    
-    def sethealth(self,value):
-        self.enemyhp += value
-
-
-    def getEXP(self,player_lvl=None,lvl=None):
-        return self.EXP
-    
-    def set_Lvl(self,lvl):
-        self.enemyhp =  int(self.enemyhp*np.log(self.enemyhp+lvl*1.2))
-        self.damage =int(self.damage*np.log(self.damage+lvl*1.2))
-        self.cooldown = int(self.cooldown- 2*np.log2((lvl+1)*.9))
-        return self
-
-
-    
-def create_MainMenu_window():
-    
-    Frame = ttk.Frame(window)
-    #START
-    window.title("TEST ALPHA")  
-    #Declare Widgits
-    Blank = ttk.Label(Frame,text='',width=45)
-    Blank2 = ttk.Label(Frame,text='',width=10)
-
-    Title = tk.Label(Frame,text='Type Caster',font=("Comfortaa",40))
-    PlayButton = tk.Button(Frame,text='Play',command =lambda:start_game() )
-    #Grid Method
-    Title.grid(row=0,column=1)
-    PlayButton.grid(row = 1, column = 1)
-    Frame.grid(row=0,column=0)
-    #Blank.grid(row=0,column=0) 
-    #Blank2.grid(row=1,column=0)
-def start_game():
-    Levels.append(Level(Current_Level).generate_lvl())
-    
-    game_page()
-
+                self.start_button.config(state=tk.NORMAL)            
 def game_page(): 
     
-    def NextEnemy(widget,container,lvl):
+    def NextEnemy(widget,container,lvl): # Can be seperated by adding enemy parameter
         global Current_Level
         #Update Level list and Selected Enemy------------------------------------
         Current_Level +=1
@@ -181,7 +186,10 @@ def game_page():
         Frame.img =img 
         widget.itemconfig(container,image=img) 
         Enemy_info.config(text='  Name: {Name}'.format(Name=enemy.getname()).ljust(17)+'Health: {health}'.format(health=enemy.gethealth()).ljust(12),relief="solid")
-        
+        Enemy_stats.config(text=" Level: {L}\n Enemy Name: {n}\n Enemy Health: {h}\n Enemy Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))
+   
+   
+    Levels.append(Level(Current_Level).generate_lvl())
     enemy = Levels[Current_Level-1].Choose_Enemy()
     print(enemy)
     style =ttk.Style()
@@ -191,16 +199,19 @@ def game_page():
 
     
     #Declare Widgits-----------------------------------------------
+
     #FRAMES----------------------------------------------
     Frame = ttk.Frame(window,style='TFrame')
     Left_block = ttk.Frame(Frame,width=200,height=300,relief="solid")
     Mid_block= ttk.Frame(Frame,width=200,height=300,relief="solid")
     Right_block = ttk.Frame(Frame,width=200,height=300,relief="solid")
-    
+    # Right Frame----------------------------------------
+    Enemy_stats = ttk.Label(Right_block,text=" Level: {L}\n Enemy Name: {n}\n Enemy Health: {h}\n Enemy Damage: {d}\n".format(L=Current_Level,n=enemy.getname(),h=enemy.gethealth(),d=enemy.getdamage()))    
+    Enemy_stats.place(x=10,y=10)
+    Right_block.grid_propagate (False) 
 #----------------------------------------------------------------------
-    settings_button = tk.Button(Frame, text = "Next", width=30, borderwidth=2, relief="raised",command=lambda:NextEnemy(Enemy_canvas,container,Current_Level+1)) #Add setting menu, Currently randomise picture
+    settings_button = tk.Button(Frame, text = "Next", width=10, borderwidth=2, relief="raised",command=lambda:NextEnemy(Enemy_canvas,container,Current_Level+1)) #Add setting menu, Currently randomise picture
     Enemy_canvas =tk.Canvas(Mid_block,width=200,height=300,bg='black')
-    
     Enemy_info = ttk.Label(Frame,text='  Name: {Name}'.format(Name=enemy.getname()).ljust(17)+'Health: {health}'.format(health=enemy.gethealth()).ljust(12),relief="solid") #Call method get_health and get_name for format
     Player_info = ttk.Label(Frame, text = '  Name: {Name}'.format(Name='Player').ljust(17)+'Health: {health}'.format(health='100').ljust(12), borderwidth=2, relief="solid") #Call method get_health and get_name for format
     Word_box = ttk.Frame(Frame,width=200,height=45,relief="solid",padding=10)
@@ -227,12 +238,15 @@ def game_page():
     img =tk.PhotoImage(file="assets/images/"+enemy.getimage())
     Frame.img =img 
     container = Enemy_canvas.create_image(0,0,image=img,anchor='nw') 
-    
+    Entry.focus()
 
 
 Levels = []
 if __name__ == "__main__":
     Current_Level = 1
+    score = 0
+    time_start = 0
+    timer_running = False
     window = tk.Tk()
     create_MainMenu_window()
     #game_page(window)        
