@@ -28,29 +28,36 @@ class Level:
     def generate_lvl(self):
         if self.event == False:
             
+            ###Balancing the game(2,3,3,4)
             NumOfEnemies = int(2+abs(1+self.lvl_num)*.4)
+
+            ###choose 3 random enemies from the list of enemies
             temp = random.sample(self.enemyjson,3)
+            ###add them into the list of enemies
             for i in temp:
                 self.list_of_enemies.append(enemy(enemyname=i['enemy_name'],enemyhp=i['enemy_health'],enemyimage=i['enemy_pic_name'],damage= i['enemy_damage'],cooldown = 0)) # remeber to change damage and cooldown
-
-            
+            ###Calls the level up function, to level up the enemies
             self.LvlUp()
             return self
         elif self.event== True:
             pass
 
+    
     def LvlUp(self):
         temp =[]
+        ### for each enemy in the list, add them to a temp list first, update their levels to the current level then replace the old enemy list
         for i in self.list_of_enemies:
 
             temp.append(i.set_Lvl(self.lvl_num))
         self.list_of_enemies = temp
         
+        ###choose one random enemy from the list
     def Choose_Enemy(self):
         return random.sample(self.list_of_enemies,1)[0]
     
-   
+
 class enemy:
+
     def __init__(self,enemyname,enemyhp,enemyimage, dialogue= '',EXP= 0,damage= 0,cooldown = 10):
 
         self.enemyhp =enemyhp
@@ -60,9 +67,11 @@ class enemy:
         self.dialogue =dialogue
         self.damage =damage
         self.cooldown =10 # Change to cooldown later
+        ### list of words for the enemy
         self.WordList=["apple", "book", "desk", "pen", "cat", "dog", "tree", "house", "car", "phone",
              "computer", "laptop", "keyboard", "mouse", "chair", "table", "door", "window", "wall", "floor","vagabond","knowing","hellish","ragged","brush"
              ,"nine","hideous","homeless","annoying","damaged","alcoholic","malicious","perpetual","wondeful","language","chemical","crazy","I was crazy once","They locked me","A rubber room","A rubber room with rats"]
+    
     def gethealth(self):
         ###Everyword typed, check for hp###
         return self.enemyhp
@@ -81,15 +90,21 @@ class enemy:
         return self.cooldown
     def getEXP(self):
         return self.EXP
-    
+
     def set_Lvl(self,lvl):
+        ###Scale stats by 10 % each level
         self.enemyhp =  RoundtoNearest(self.enemyhp*(1+lvl*.1),5)
+        
         self.damage =RoundtoNearest(self.damage*(1+lvl*.5),5)
 
+        ###cool down decreases to finally a plateu
         self.cooldown = int(self.cooldown- 2*np.log2((lvl+1)*.9))
         
         return self
+    
 
+
+###Player class inherits everything from the enemy class
 class player(enemy):
     def __init__(self):
         self.enemyname ='Player'
@@ -101,13 +116,18 @@ class player(enemy):
         self.TimeBonus = 0
         self.DMG_Multi = 1.0
         self.DEF_Multi = 1.0
+
+    ###call this class when the player beats an enemy
     def addEXP(self,value):
         self.EXP += value
 
+    ###call this class when the player has earned enuf exp
     def LvlUp(self,root):
         self.EXP = 0
         self.Level+=1
         self.LvlUp_screen(root)
+        
+    ###when this function runs, deletes the popup screen for the level up,resets the timer,chooses the next random enemy, and based on the key chosen, the various effects will happen
     def LvlUp_Helper(self,key,popup):
         if key =='increase_Dmg':
             self.damage += 1
@@ -146,10 +166,14 @@ class player(enemy):
             popup.destroy()
             Game.NextEnemy()
             Game.update_timer()
-            
+    
+
+    ###The level up screen will pop up when called
     def LvlUp_screen(self,root):
         #---------------------------------------Logic--------------------------------------------
+        ###list of upgrades currently        
         ListofUpgrade = {'increase_Dmg':'Increae Damage by 1','increase_HP':'Increase Health by 10','increase_Def':"Reduce Damage taken by 1","increase_Time":"Increase timer on monster by 3","Mulitply_DMG":"Increase Damamge Mulitpyer by 10%","Mulitply_Def":"Increase Defence Mulitpyer by 10%"}
+        ### player can choose from a list of 3 random upgrades
         Avaiable_options = random.sample(list(ListofUpgrade),3)
         
         #-----------------------------------Window Settings-------------------------------
@@ -158,14 +182,15 @@ class player(enemy):
         
         Text = tk.Label(popup,text="LEVEL UP!",font=("Comfortaa",20))
         Text.grid(row=0,column=1)
+
+        ###lists the 3 options into a grid with 2 row and 3 columns
         Option1_Text = tk.Label(popup,text=ListofUpgrade[Avaiable_options[0]]).grid(row=1,column=0)
         Option2_Text = tk.Label(popup,text=ListofUpgrade[Avaiable_options[1]]).grid(row=1,column=1)
         Option3_Text = tk.Label(popup,text=ListofUpgrade[Avaiable_options[2]]).grid(row=1,column=2)
         Option1_Button = ttk.Button(popup,text='LVL UP',command=lambda: self.LvlUp_Helper(Avaiable_options[0],popup)).grid(row=2,column=0)
         Option2_Button = ttk.Button(popup,text='LVL UP',command=lambda: self.LvlUp_Helper(Avaiable_options[1],popup)).grid(row=2,column=1)
         Option3_Button = ttk.Button(popup,text='LVL UP',command=lambda: self.LvlUp_Helper(Avaiable_options[2],popup)).grid(row=2,column=2)
-
-        
+  
 def RoundtoNearest(value,base):
     return base*round(value/base)    
 
