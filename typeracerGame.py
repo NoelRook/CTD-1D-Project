@@ -62,7 +62,7 @@ class enemy:
         self.cooldown =10 # Change to cooldown later
         self.WordList=["apple", "book", "desk", "pen", "cat", "dog", "tree", "house", "car", "phone",
              "computer", "laptop", "keyboard", "mouse", "chair", "table", "door", "window", "wall", "floor","vagabond","knowing","hellish","ragged","brush"
-             ,"nine","hideous","homeless","annoying","damaged","alcoholic","malicious","perpetual","wondeful","language","chemical","crazy","I was crazy once","They locked me in a room","A rubber room","A rubber room with rats"]
+             ,"nine","hideous","homeless","annoying","damaged","alcoholic","malicious","perpetual","wondeful","language","chemical","crazy","I was crazy once","They locked me","A rubber room","A rubber room with rats"]
     def gethealth(self):
         ###Everyword typed, check for hp###
         return self.enemyhp
@@ -79,7 +79,7 @@ class enemy:
 
     def getcooldown(self):
         return self.cooldown
-    def getEXP(self,player_lvl=None,lvl=None):
+    def getEXP(self):
         return self.EXP
     
     def set_Lvl(self,lvl):
@@ -328,7 +328,7 @@ class TyperacerGame:
 
         self.timer_queue =self.root.after(1000,lambda: self.update_timer())
     
-        
+    
     def deal_damage(self):
         self.enemy.sethealth(-int((self.Player.damage*self.Player.DMG_Multi)))
         if self.enemy.gethealth() >0:
